@@ -1,129 +1,129 @@
 ---
 name: agent-builder
 description: |
-  Design and build AI agents for any domain. Use when users:
-  (1) ask to "create an agent", "build an assistant", or "design an AI system"
-  (2) want to understand agent architecture, agentic patterns, or autonomous AI
-  (3) need help with capabilities, subagents, planning, or skill mechanisms
-  (4) ask about Claude Code, Cursor, or similar agent internals
-  (5) want to build agents for business, research, creative, or operational tasks
-  Keywords: agent, assistant, autonomous, workflow, tool use, multi-step, orchestration
+  为任意领域设计与构建 AI 智能体。适用于用户：
+  (1) 要求「创建智能体」「构建助手」或「设计 AI 系统」
+  (2) 想了解智能体架构、智能体模式或自主 AI
+  (3) 需要能力、子智能体、规划或技能机制方面的帮助
+  (4) 询问 Claude Code、Cursor 或类似智能体内部原理
+  (5) 希望为业务、研究、创意或运营任务构建智能体
+  关键词：智能体、助手、自主、工作流、工具调用、多步、编排
 ---
 
-# Agent Builder
+# 智能体构建
 
-Build AI agents for any domain - customer service, research, operations, creative work, or specialized business processes.
+为任意领域构建 AI 智能体——客服、研究、运营、创意或专项业务流程。
 
-## The Core Philosophy
+## 核心理念
 
-> **The model already knows how to be an agent. Your job is to get out of the way.**
+> **模型本身已经知道如何扮演智能体。你的工作是少挡路。**
 
-An agent is not complex engineering. It's a simple loop that invites the model to act:
+智能体不是复杂工程，而是一个邀请模型行动的简单循环：
 
 ```
-LOOP:
-  Model sees: context + available capabilities
-  Model decides: act or respond
-  If act: execute capability, add result, continue
-  If respond: return to user
+循环：
+  模型看到：上下文 + 可用能力
+  模型决定：执行动作 或 回复用户
+  若执行：运行能力、追加结果、继续
+  若回复：返回给用户
 ```
 
-**That's it.** The magic isn't in the code - it's in the model. Your code just provides the opportunity.
+**仅此而已。** 魔力不在代码里，而在模型里。你的代码只是提供机会。
 
-## The Three Elements
+## 三要素
 
-### 1. Capabilities (What can it DO?)
+### 1. 能力（它能做什么？）
 
-Atomic actions the agent can perform: search, read, create, send, query, modify.
+智能体可执行的原子操作：搜索、读取、创建、发送、查询、修改。
 
-**Design principle**: Start with 3-5 capabilities. Add more only when the agent consistently fails because a capability is missing.
+**设计原则**：先设 3～5 项能力。仅在智能体因缺少某项能力而反复失败时再增加。
 
-### 2. Knowledge (What does it KNOW?)
+### 2. 知识（它知道什么？）
 
-Domain expertise injected on-demand: policies, workflows, best practices, schemas.
+按需注入的领域知识：策略、工作流、最佳实践、模式。
 
-**Design principle**: Make knowledge available, not mandatory. Load it when relevant, not upfront.
+**设计原则**：让知识可被获取，而非强制加载。在相关时再加载，不要一开始全塞进去。
 
-### 3. Context (What has happened?)
+### 3. 上下文（发生了什么？）
 
-The conversation history - the thread connecting actions into coherent behavior.
+对话历史——把一系列动作串成连贯行为的线索。
 
-**Design principle**: Context is precious. Isolate noisy subtasks. Truncate verbose outputs. Protect clarity.
+**设计原则**：上下文很宝贵。隔离嘈杂子任务。截断冗长输出。保持清晰。
 
-## Agent Design Thinking
+## 智能体设计思路
 
-Before building, understand:
+动手前先想清楚：
 
-- **Purpose**: What should this agent accomplish?
-- **Domain**: What world does it operate in? (customer service, research, operations, creative...)
-- **Capabilities**: What 3-5 actions are essential?
-- **Knowledge**: What expertise does it need access to?
-- **Trust**: What decisions can you delegate to the model?
+- **目的**：这个智能体要完成什么？
+- **领域**：它在什么世界运作？（客服、研究、运营、创意……）
+- **能力**：哪 3～5 个动作是必不可少的？
+- **知识**：它需要接触哪些专业知识？
+- **信任**：哪些决策可以交给模型？
 
-**CRITICAL**: Trust the model. Don't over-engineer. Don't pre-specify workflows. Give it capabilities and let it reason.
+**关键**：信任模型。不要过度设计。不要预先规定工作流。给它能力，让它自己推理。
 
-## Progressive Complexity
+## 渐进式复杂度
 
-Start simple. Add complexity only when real usage reveals the need:
+从简单开始。只有在真实使用暴露出需求时再增加复杂度：
 
-| Level | What to add | When to add it |
-|-------|-------------|----------------|
-| Basic | 3-5 capabilities | Always start here |
-| Planning | Progress tracking | Multi-step tasks lose coherence |
-| Subagents | Isolated child agents | Exploration pollutes context |
-| Skills | On-demand knowledge | Domain expertise needed |
+| 级别 | 增加什么 | 何时增加 |
+|------|----------|----------|
+| 基础 | 3～5 项能力 | 始终从这里起步 |
+| 规划 | 进度追踪 | 多步任务失去连贯性时 |
+| 子智能体 | 隔离的子智能体 | 探索污染上下文时 |
+| 技能 | 按需知识 | 需要领域专长时 |
 
-**Most agents never need to go beyond Level 2.**
+**大多数智能体不必超过第 2 级。**
 
-## Domain Examples
+## 领域示例
 
-**Business**: CRM queries, email, calendar, approvals
-**Research**: Database search, document analysis, citations
-**Operations**: Monitoring, tickets, notifications, escalation
-**Creative**: Asset generation, editing, collaboration, review
+**业务**：CRM 查询、邮件、日历、审批  
+**研究**：数据库检索、文档分析、引用  
+**运营**：监控、工单、通知、升级  
+**创意**：素材生成、编辑、协作、审阅  
 
-The pattern is universal. Only the capabilities change.
+模式是通用的，只是能力不同。
 
-## Key Principles
+## 核心原则
 
-1. **The model IS the agent** - Code just runs the loop
-2. **Capabilities enable** - What it CAN do
-3. **Knowledge informs** - What it KNOWS how to do
-4. **Constraints focus** - Limits create clarity
-5. **Trust liberates** - Let the model reason
-6. **Iteration reveals** - Start minimal, evolve from usage
+1. **模型就是智能体**——代码只负责跑循环
+2. **能力赋能**——它能做什么
+3. **知识指导**——它知道怎么做
+4. **约束聚焦**——限制带来清晰
+5. **信任解放**——让模型推理
+6. **迭代显现**——从最小开始，根据使用演进
 
-## Anti-Patterns
+## 反模式
 
-| Pattern | Problem | Solution |
-|---------|---------|----------|
-| Over-engineering | Complexity before need | Start simple |
-| Too many capabilities | Model confusion | 3-5 to start |
-| Rigid workflows | Can't adapt | Let model decide |
-| Front-loaded knowledge | Context bloat | Load on-demand |
-| Micromanagement | Undercuts intelligence | Trust the model |
+| 模式 | 问题 | 应对 |
+|------|------|------|
+| 过度工程 | 在需要之前就复杂化 | 从简单开始 |
+| 能力过多 | 模型困惑 | 起步只设 3～5 项 |
+| 僵化工作流 | 无法适应 | 让模型决定 |
+| 前置加载知识 | 上下文膨胀 | 按需加载 |
+| 事无巨细管控 | 削弱智能 | 信任模型 |
 
-## Resources
+## 参考资源
 
-**Philosophy & Theory**:
-- `references/agent-philosophy.md` - Deep dive into why agents work
+**理念与理论**：
+- `references/agent-philosophy.md` - 深入理解智能体为何有效
 
-**Implementation**:
-- `references/minimal-agent.py` - Complete working agent (~80 lines)
-- `references/tool-templates.py` - Capability definitions
-- `references/subagent-pattern.py` - Context isolation
+**实现**：
+- `references/minimal-agent.py` - 完整可运行智能体（约 80 行）
+- `references/tool-templates.py` - 能力定义
+- `references/subagent-pattern.py` - 上下文隔离
 
-**Scaffolding**:
-- `scripts/init_agent.py` - Generate new agent projects
+**脚手架**：
+- `scripts/init_agent.py` - 生成新智能体项目
 
-## The Agent Mindset
+## 智能体心态
 
-**From**: "How do I make the system do X?"
-**To**: "How do I enable the model to do X?"
+**从**：「我怎么让系统做 X？」  
+**到**：「我怎么让模型能够做 X？」
 
-**From**: "What's the workflow for this task?"
-**To**: "What capabilities would help accomplish this?"
+**从**：「这个任务的工作流是什么？」  
+**到**：「哪些能力能帮助完成这件事？」
 
-The best agent code is almost boring. Simple loops. Clear capabilities. Clean context. The magic isn't in the code.
+最好的智能体代码几乎平淡无奇：简单循环、清晰能力、干净上下文。魔力不在代码里。
 
-**Give the model capabilities and knowledge. Trust it to figure out the rest.**
+**给模型能力和知识，相信它会搞定其余。**

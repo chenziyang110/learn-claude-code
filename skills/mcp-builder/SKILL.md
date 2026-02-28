@@ -1,66 +1,66 @@
 ---
 name: mcp-builder
-description: Build MCP (Model Context Protocol) servers that give Claude new capabilities. Use when user wants to create an MCP server, add tools to Claude, or integrate external services.
+description: 构建 MCP（Model Context Protocol）服务器，为 Claude 提供新能力。适用于用户想创建 MCP 服务器、为 Claude 添加工具或对接外部服务时。
 ---
 
-# MCP Server Building Skill
+# MCP 服务器构建技能
 
-You now have expertise in building MCP (Model Context Protocol) servers. MCP enables Claude to interact with external services through a standardized protocol.
+你具备构建 MCP（Model Context Protocol）服务器的能力。MCP 让 Claude 通过统一协议与外部服务交互。
 
-## What is MCP?
+## 什么是 MCP？
 
-MCP servers expose:
-- **Tools**: Functions Claude can call (like API endpoints)
-- **Resources**: Data Claude can read (like files or database records)
-- **Prompts**: Pre-built prompt templates
+MCP 服务器可暴露：
+- **工具（Tools）**：Claude 可调用的函数（类似 API 端点）
+- **资源（Resources）**：Claude 可读取的数据（如文件或数据库记录）
+- **提示（Prompts）**：预置的提示模板
 
-## Quick Start: Python MCP Server
+## 快速开始：Python MCP 服务器
 
-### 1. Project Setup
+### 1. 项目准备
 
 ```bash
-# Create project
+# 创建项目
 mkdir my-mcp-server && cd my-mcp-server
 python3 -m venv venv && source venv/bin/activate
 
-# Install MCP SDK
+# 安装 MCP SDK
 pip install mcp
 ```
 
-### 2. Basic Server Template
+### 2. 基础服务器模板
 
 ```python
 #!/usr/bin/env python3
-"""my_server.py - A simple MCP server"""
+"""my_server.py - 简单 MCP 服务器"""
 
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import Tool, TextContent
 
-# Create server instance
+# 创建服务器实例
 server = Server("my-server")
 
-# Define a tool
+# 定义工具
 @server.tool()
 async def hello(name: str) -> str:
-    """Say hello to someone.
+    """向某人打招呼。
 
     Args:
-        name: The name to greet
+        name: 要问候的名字
     """
     return f"Hello, {name}!"
 
 @server.tool()
 async def add_numbers(a: int, b: int) -> str:
-    """Add two numbers together.
+    """两数相加。
 
     Args:
-        a: First number
-        b: Second number
+        a: 第一个数
+        b: 第二个数
     """
     return str(a + b)
 
-# Run server
+# 运行服务器
 async def main():
     async with stdio_server() as (read, write):
         await server.run(read, write)
@@ -70,9 +70,9 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-### 3. Register with Claude
+### 3. 在 Claude 中注册
 
-Add to `~/.claude/mcp.json`:
+在 `~/.claude/mcp.json` 中添加：
 ```json
 {
   "mcpServers": {
@@ -84,9 +84,9 @@ Add to `~/.claude/mcp.json`:
 }
 ```
 
-## TypeScript MCP Server
+## TypeScript MCP 服务器
 
-### 1. Setup
+### 1. 准备
 
 ```bash
 mkdir my-mcp-server && cd my-mcp-server
@@ -94,7 +94,7 @@ npm init -y
 npm install @modelcontextprotocol/sdk
 ```
 
-### 2. Template
+### 2. 模板
 
 ```typescript
 // src/index.ts
@@ -106,7 +106,7 @@ const server = new Server({
   version: "1.0.0",
 });
 
-// Define tools
+// 定义工具
 server.setRequestHandler("tools/list", async () => ({
   tools: [
     {
@@ -131,14 +131,14 @@ server.setRequestHandler("tools/call", async (request) => {
   throw new Error("Unknown tool");
 });
 
-// Start server
+// 启动服务器
 const transport = new StdioServerTransport();
 server.connect(transport);
 ```
 
-## Advanced Patterns
+## 进阶模式
 
-### External API Integration
+### 对接外部 API
 
 ```python
 import httpx
@@ -148,7 +148,7 @@ server = Server("weather-server")
 
 @server.tool()
 async def get_weather(city: str) -> str:
-    """Get current weather for a city."""
+    """获取某城市当前天气。"""
     async with httpx.AsyncClient() as client:
         resp = await client.get(
             f"https://api.weatherapi.com/v1/current.json",
@@ -158,7 +158,7 @@ async def get_weather(city: str) -> str:
         return f"{city}: {data['current']['temp_c']}C, {data['current']['condition']['text']}"
 ```
 
-### Database Access
+### 数据库访问
 
 ```python
 import sqlite3
@@ -168,7 +168,7 @@ server = Server("db-server")
 
 @server.tool()
 async def query_db(sql: str) -> str:
-    """Execute a read-only SQL query."""
+    """执行只读 SQL 查询。"""
     if not sql.strip().upper().startswith("SELECT"):
         return "Error: Only SELECT queries allowed"
 
@@ -179,35 +179,35 @@ async def query_db(sql: str) -> str:
     return str(rows)
 ```
 
-### Resources (Read-only Data)
+### 资源（只读数据）
 
 ```python
 @server.resource("config://settings")
 async def get_settings() -> str:
-    """Application settings."""
+    """应用配置。"""
     return open("settings.json").read()
 
 @server.resource("file://{path}")
 async def read_file(path: str) -> str:
-    """Read a file from the workspace."""
+    """从工作区读取文件。"""
     return open(path).read()
 ```
 
-## Testing
+## 测试
 
 ```bash
-# Test with MCP Inspector
+# 用 MCP Inspector 测试
 npx @anthropics/mcp-inspector python3 my_server.py
 
-# Or send test messages directly
+# 或直接发送测试消息
 echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | python3 my_server.py
 ```
 
-## Best Practices
+## 最佳实践
 
-1. **Clear tool descriptions**: Claude uses these to decide when to call tools
-2. **Input validation**: Always validate and sanitize inputs
-3. **Error handling**: Return meaningful error messages
-4. **Async by default**: Use async/await for I/O operations
-5. **Security**: Never expose sensitive operations without auth
-6. **Idempotency**: Tools should be safe to retry
+1. **工具描述清晰**：Claude 靠描述决定何时调用
+2. **输入校验**：始终校验并净化输入
+3. **错误处理**：返回有意义的错误信息
+4. **默认异步**：I/O 用 async/await
+5. **安全**：敏感操作必须有鉴权
+6. **幂等**：工具应可安全重试

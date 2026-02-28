@@ -112,8 +112,13 @@ def run_bash(command: str) -> str:
         return "错误：已拦截危险命令"
     try:
         if IS_WINDOWS:
+            # 强制 PowerShell 以 UTF-8 输出，避免中文系统代码页（GBK）导致乱码
+            utf8_prefix = (
+                "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; "
+                "$OutputEncoding = [System.Text.Encoding]::UTF8; "
+            )
             r = subprocess.run(
-                ["powershell", "-NoProfile", "-Command", command],
+                ["powershell", "-NoProfile", "-Command", utf8_prefix + command],
                 cwd=WORKDIR,
                 capture_output=True,
                 text=True,

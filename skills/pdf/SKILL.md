@@ -1,21 +1,21 @@
 ---
 name: pdf
-description: Process PDF files - extract text, create PDFs, merge documents. Use when user asks to read PDF, create PDF, or work with PDF files.
+description: 处理 PDF 文件——提取文本、生成 PDF、合并文档。适用于用户要求读取 PDF、创建 PDF 或处理 PDF 时。
 ---
 
-# PDF Processing Skill
+# PDF 处理技能
 
-You now have expertise in PDF manipulation. Follow these workflows:
+你具备 PDF 操作能力。请按以下流程执行：
 
-## Reading PDFs
+## 读取 PDF
 
-**Option 1: Quick text extraction (preferred)**
+**方式一：快速提取文本（推荐）**
 ```bash
-# Using pdftotext (poppler-utils)
-pdftotext input.pdf -  # Output to stdout
-pdftotext input.pdf output.txt  # Output to file
+# 使用 pdftotext（poppler-utils）
+pdftotext input.pdf -  # 输出到 stdout
+pdftotext input.pdf output.txt  # 输出到文件
 
-# If pdftotext not available, try:
+# 若无 pdftotext，可尝试：
 python3 -c "
 import fitz  # PyMuPDF
 doc = fitz.open('input.pdf')
@@ -24,32 +24,32 @@ for page in doc:
 "
 ```
 
-**Option 2: Page-by-page with metadata**
+**方式二：按页读取并带元数据**
 ```python
 import fitz  # pip install pymupdf
 
 doc = fitz.open("input.pdf")
-print(f"Pages: {len(doc)}")
-print(f"Metadata: {doc.metadata}")
+print(f"页数: {len(doc)}")
+print(f"元数据: {doc.metadata}")
 
 for i, page in enumerate(doc):
     text = page.get_text()
-    print(f"--- Page {i+1} ---")
+    print(f"--- 第 {i+1} 页 ---")
     print(text)
 ```
 
-## Creating PDFs
+## 创建 PDF
 
-**Option 1: From Markdown (recommended)**
+**方式一：从 Markdown（推荐）**
 ```bash
-# Using pandoc
+# 使用 pandoc
 pandoc input.md -o output.pdf
 
-# With custom styling
+# 自定义样式
 pandoc input.md -o output.pdf --pdf-engine=xelatex -V geometry:margin=1in
 ```
 
-**Option 2: Programmatically**
+**方式二：代码生成**
 ```python
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
@@ -59,19 +59,19 @@ c.drawString(100, 750, "Hello, PDF!")
 c.save()
 ```
 
-**Option 3: From HTML**
+**方式三：从 HTML**
 ```bash
-# Using wkhtmltopdf
+# 使用 wkhtmltopdf
 wkhtmltopdf input.html output.pdf
 
-# Or with Python
+# 或用 Python
 python3 -c "
 import pdfkit
 pdfkit.from_file('input.html', 'output.pdf')
 "
 ```
 
-## Merging PDFs
+## 合并 PDF
 
 ```python
 import fitz
@@ -83,7 +83,7 @@ for pdf_path in ["file1.pdf", "file2.pdf", "file3.pdf"]:
 result.save("merged.pdf")
 ```
 
-## Splitting PDFs
+## 拆分 PDF
 
 ```python
 import fitz
@@ -95,18 +95,18 @@ for i in range(len(doc)):
     single.save(f"page_{i+1}.pdf")
 ```
 
-## Key Libraries
+## 常用库
 
-| Task | Library | Install |
-|------|---------|---------|
-| Read/Write/Merge | PyMuPDF | `pip install pymupdf` |
-| Create from scratch | ReportLab | `pip install reportlab` |
-| HTML to PDF | pdfkit | `pip install pdfkit` + wkhtmltopdf |
-| Text extraction | pdftotext | `brew install poppler` / `apt install poppler-utils` |
+| 任务 | 库 | 安装 |
+|------|-----|------|
+| 读/写/合并 | PyMuPDF | `pip install pymupdf` |
+| 从零创建 | ReportLab | `pip install reportlab` |
+| HTML 转 PDF | pdfkit | `pip install pdfkit` + wkhtmltopdf |
+| 文本提取 | pdftotext | `brew install poppler` / `apt install poppler-utils` |
 
-## Best Practices
+## 最佳实践
 
-1. **Always check if tools are installed** before using them
-2. **Handle encoding issues** - PDFs may contain various character encodings
-3. **Large PDFs**: Process page by page to avoid memory issues
-4. **OCR for scanned PDFs**: Use `pytesseract` if text extraction returns empty
+1. **使用前确认工具已安装**
+2. **处理编码**——PDF 可能含多种字符编码
+3. **大文件**：按页处理，避免内存问题
+4. **扫描件 OCR**：若提取不到文字，可用 `pytesseract`
