@@ -1,0 +1,15 @@
+{
+  "team_name": "default",
+  "members": [
+    {
+      "name": "托马",
+      "role": "程序员",
+      "status": "idle"
+    },
+    {
+      "name": "得胜",
+      "role": "测试员",
+      "status": "working"
+    }
+  ]
+}
